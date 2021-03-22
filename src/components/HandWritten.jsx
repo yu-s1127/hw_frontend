@@ -6,8 +6,8 @@ const HandWritten = () => {
   const canvasRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
 
-  const canvasWidth = 120;
-  const canvasHeight = 120;
+  const canvasWidth = 128;
+  const canvasHeight = 128;
 
   const startDrawing = () => {
     setDrawing(true);
@@ -33,7 +33,17 @@ const HandWritten = () => {
   };
 
   const predict = async () => {
-    const base64String = canvasRef.current.toDataURL('image/png');
+    const resizedCanvas = document.createElement('canvas');
+    const resizedContext = resizedCanvas.getContext('2d');
+
+    resizedCanvas.height = '28';
+    resizedCanvas.width = '28';
+
+    const canvas = canvasRef.current;
+
+    resizedContext.drawImage(canvas, 0, 0, 28, 28);
+    const base64String = resizedCanvas.toDataURL('image');
+    // const base64String = canvasRef.current.toDataURL('image/png');
     // console.log(base64String);
 
     const response = await axios
@@ -41,7 +51,7 @@ const HandWritten = () => {
         image: base64String,
       })
       .catch((err) => {
-        alert('an error occured while predicting');
+        console.log('an error occured while predicting');
       });
 
     console.log(response);
