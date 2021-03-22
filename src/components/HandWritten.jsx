@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
 
 const HandWritten = () => {
   const canvasRef = useRef(null);
@@ -10,6 +11,16 @@ const HandWritten = () => {
 
   const canvasWidth = 128;
   const canvasHeight = 128;
+
+  const data = {
+    labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    datasets: [
+      {
+        label: 'prediction',
+        data: predictionProb,
+      },
+    ],
+  };
 
   const startDrawing = () => {
     setDrawing(true);
@@ -81,11 +92,7 @@ const HandWritten = () => {
 
       <div>
         <h2>Predicted: {predictedLabel}</h2>
-        {predictionProb.map((prob, index) => (
-          <p>
-            {index}: {prob}
-          </p>
-        ))}
+        <Bar data={data} />
       </div>
     </SContainer>
   );
