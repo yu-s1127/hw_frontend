@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const HandWritten = () => {
   const canvasRef = useRef(null);
@@ -31,6 +32,21 @@ const HandWritten = () => {
     canvas.stroke();
   };
 
+  const predict = async () => {
+    const base64String = canvasRef.current.toDataURL('image/png');
+    // console.log(base64String);
+
+    const response = await axios
+      .post('http://localhost:8000/api/predict', {
+        image: base64String,
+      })
+      .catch((err) => {
+        alert('an error occured while predicting');
+      });
+
+    console.log(response);
+  };
+
   return (
     <SContainer>
       <h1>Hand Written Recognition</h1>
@@ -47,7 +63,7 @@ const HandWritten = () => {
 
       <SButtonContainer>
         <SButton onClick={clearDrawing}>reset</SButton>
-        <SButton>predict</SButton>
+        <SButton onClick={predict}>predict</SButton>
       </SButtonContainer>
     </SContainer>
   );
