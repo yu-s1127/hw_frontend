@@ -5,6 +5,8 @@ import axios from 'axios';
 const HandWritten = () => {
   const canvasRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
+  const [predictedLabel, setPredictedLabel] = useState('');
+  const [predictionProb, setPredictionProb] = useState([]);
 
   const canvasWidth = 128;
   const canvasHeight = 128;
@@ -54,7 +56,8 @@ const HandWritten = () => {
         console.log('an error occured while predicting');
       });
 
-    console.log(response);
+    setPredictedLabel(response.data.predicted_label);
+    setPredictionProb(response.data.prediction_prob);
   };
 
   return (
@@ -75,6 +78,15 @@ const HandWritten = () => {
         <SButton onClick={clearDrawing}>reset</SButton>
         <SButton onClick={predict}>predict</SButton>
       </SButtonContainer>
+
+      <div>
+        <h2>Predicted: {predictedLabel}</h2>
+        {predictionProb.map((prob, index) => (
+          <p>
+            {index}: {prob}
+          </p>
+        ))}
+      </div>
     </SContainer>
   );
 };
