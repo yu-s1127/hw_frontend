@@ -45,6 +45,13 @@ const HandWritten = () => {
     canvas.stroke();
   };
 
+  const handleReset = () => {
+    clearDrawing();
+
+    setPredictedLabel('');
+    setPredictionProb([]);
+  };
+
   const predict = async () => {
     const resizedCanvas = document.createElement('canvas');
     const resizedContext = resizedCanvas.getContext('2d');
@@ -86,12 +93,12 @@ const HandWritten = () => {
       />
 
       <SButtonContainer>
-        <SButton onClick={clearDrawing}>reset</SButton>
+        <SButton onClick={handleReset}>reset</SButton>
         <SButton onClick={predict}>predict</SButton>
       </SButtonContainer>
 
       <div>
-        <h2>Predicted: {predictedLabel}</h2>
+        {predictedLabel === '' || <h2>Predicted: {predictedLabel}</h2>}
         <Bar data={data} />
       </div>
     </SContainer>
